@@ -32,6 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "Game_local.h"
+#include "d3doom_ogengine_integration.h"	/* ODOOM3-BFG OASIS STAR integration */
 
 #ifdef GAME_DLL
 
@@ -381,6 +382,7 @@ void idGameLocal::Init()
 	Printf( "game initialized.\n" );
 	Printf( "--------------------------------------\n" );
 
+	D3Doom_STAR_Init();	/* ODOOM3-BFG: OASIS STAR API */
 }
 
 /*
@@ -392,6 +394,7 @@ idGameLocal::Shutdown
 */
 void idGameLocal::Shutdown()
 {
+	D3Doom_STAR_Cleanup();	/* ODOOM3-BFG: flush and save OASIS STAR session */
 
 	if( !common )
 	{
@@ -2632,6 +2635,8 @@ void idGameLocal::RunFrame( idUserCmdMgr& cmdMgr, gameReturn_t& ret )
 {
 	SCOPED_PROFILE_EVENT( "RunFrame" );
 
+	D3Doom_STAR_Tick();	/* ODOOM3-BFG: pump async STAR callbacks and drain log */
+
 	idEntity* 	ent;
 	int			num;
 	float		ms;
@@ -4470,6 +4475,8 @@ bool idGameLocal::RequirementMet( idEntity* activator, const idStr& requires, in
 			}
 			else
 			{
+				/* ODOOM3-BFG: fallback to cross-game STAR inventory (Blue Key, Red Key, etc.) */
+				if( D3Doom_STAR_CheckDoorAccess( requires.c_str() ) ) { return true; }
 				return false;
 			}
 		}

@@ -30,6 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "Game_local.h"
+#include "d3doom_ogengine_integration.h"	/* ODOOM3-BFG OASIS STAR integration */
 #include "../framework/Common_local.h"
 #include "PredictedValue_impl.h"
 
@@ -4678,6 +4679,12 @@ bool idPlayer::GiveInventoryItem( idDict* item, unsigned int giveFlags )
 	if( giveFlags & ITEM_GIVE_UPDATE_STATE )
 	{
 		inventory.items.Append( new( TAG_ENTITY ) idDict( *item ) );
+
+		/* ODOOM3-BFG: report pickup to OASIS STAR (keys, PDAs, items) */
+		D3Doom_STAR_OnItemPickup(
+			item->GetString( "inv_name" ),
+			item->GetString( "classname" ),
+			item->GetBool( "inv_carry" ) ? 1 : 0 );
 	}
 
 	const char* itemName = item->GetString( "inv_name" );

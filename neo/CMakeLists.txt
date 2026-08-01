@@ -689,8 +689,9 @@ set(GAMED3XP_INCLUDES
 	d3xp/Target.h
 	d3xp/Trigger.h
 	d3xp/Weapon.h
-	d3xp/WorldSpawn.h)
-	
+	d3xp/WorldSpawn.h
+	d3xp/d3doom_star_integration.h)	# ODOOM3-BFG OASIS STAR integration
+
 set(GAMED3XP_SOURCES
 	d3xp/Achievements.cpp
 	d3xp/Actor.cpp
@@ -726,7 +727,8 @@ set(GAMED3XP_SOURCES
 	d3xp/Target.cpp
 	d3xp/Trigger.cpp
 	d3xp/Weapon.cpp
-	d3xp/WorldSpawn.cpp)
+	d3xp/WorldSpawn.cpp
+	d3xp/d3doom_star_integration.cpp)	# ODOOM3-BFG OASIS STAR integration
 
 file(GLOB GAMED3XP_AI_INCLUDES d3xp/ai/*.h)
 file(GLOB GAMED3XP_AI_SOURCES d3xp/ai/*.cpp)
@@ -1079,7 +1081,11 @@ add_definitions(-D__DOOM__)
 include_directories(
 			.
 			idlib
+			d3xp	# allows d3xp sources to include OGLib/ and star_api.h by relative path
             )
+
+# ODOOM3-BFG: star_sync implementation lives in star_api.dll (NativeAOT); do not compile star_sync.c
+add_definitions(-DOASIS_STAR_SYNC_IN_CLIENT=1)
 
 if(MSVC)
 	
@@ -1238,6 +1244,8 @@ if(MSVC)
 		${FFmpeg_LIBRARIES}
         ${ZLIB_LIBRARY}
 		${CMAKE_DL_LIBS}
+		# ODOOM3-BFG OASIS STAR API
+		${CMAKE_CURRENT_SOURCE_DIR}/d3xp/star_api.lib
 		)
 		
 	# set MSVC default debug directory on executable	

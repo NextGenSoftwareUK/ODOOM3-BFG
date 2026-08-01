@@ -30,6 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "../Game_local.h"
+#include "../d3doom_ogengine_integration.h"	/* ODOOM3-BFG OASIS STAR integration */
 
 static const char* moveCommandString[ NUM_MOVE_COMMANDS ] =
 {
@@ -3878,6 +3879,9 @@ void idAI::Killed( idEntity* inflictor, idEntity* attacker, int damage, const id
 {
 	idAngles ang;
 	const char* modelDeath;
+
+	/* ODOOM3-BFG: report kill to OASIS STAR (XP + optional NFT mint) */
+	D3Doom_STAR_OnMonsterKilled( GetEntityDefName(), 0 );
 
 	// Guardian died?  grats, you get an achievement
 	if( idStr::Icmp( name, "guardian_spawn" ) == 0 )
