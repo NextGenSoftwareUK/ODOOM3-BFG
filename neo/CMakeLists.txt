@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+﻿cmake_minimum_required(VERSION 3.10)
 
 if(NOT DEFINED APP_NAME)
 	# RB: This sets the name of the .exe and is the only line needed for a different mod executable.
@@ -1081,10 +1081,10 @@ add_definitions(-D__DOOM__)
 include_directories(
 			.
 			idlib
-			d3xp	# allows d3xp sources to include OGLib/ and star_api.h by relative path
+			d3xp	# allows d3xp sources to include OGLib/ and OGEngineClient.h by relative path
             )
 
-# ODOOM3-BFG: star_sync implementation lives in star_api.dll (NativeAOT); do not compile star_sync.c
+# ODOOM3-BFG: star_sync implementation lives in OGEngineClient.dll (NativeAOT); do not compile star_sync.c
 add_definitions(-DOASIS_STAR_SYNC_IN_CLIENT=1)
 
 if(MSVC)
@@ -1245,7 +1245,7 @@ if(MSVC)
         ${ZLIB_LIBRARY}
 		${CMAKE_DL_LIBS}
 		# ODOOM3-BFG OASIS STAR API
-		${CMAKE_CURRENT_SOURCE_DIR}/d3xp/star_api.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/d3xp/OGEngineClient.lib
 		)
 		
 	# set MSVC default debug directory on executable	
